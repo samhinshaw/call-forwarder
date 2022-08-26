@@ -22,7 +22,7 @@ import subprocess
 
 RINGS_BEFORE_AUTO_ANSWER = 2  # Must be greater than 1
 MODEM_RESPONSE_READ_TIMEOUT = 120  # Time in Seconds (Default 120 Seconds)
-MODEM_NAME = "U.S. Robotics"  # Modem Manufacturer, For Ex: 'U.S. Robotics' if the 'lsusb' cmd output is similar to "Bus 001 Device 004: ID 0baf:0303 U.S. Robotics"
+MODEM_NAME = "Conexant Systems (Rockwell), Inc. USB Modem"  # Modem Manufacturer, For Ex: 'U.S. Robotics' if the 'lsusb' cmd output is similar to "Bus 001 Device 004: ID 0baf:0303 U.S. Robotics"
 
 
 # Record Voice Mail Variables
