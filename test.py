@@ -1,18 +1,16 @@
 import serial  # pip install pyserial
 import atexit
 import sys
-import re
-import wave
+# import re
+# import wave
 from datetime import datetime
 import os
 import fcntl
 import subprocess
 
-
 RINGS_BEFORE_AUTO_ANSWER = 2  # Must be greater than 1
 MODEM_RESPONSE_READ_TIMEOUT = 120  # Time in Seconds (Default 120 Seconds)
 MODEM_NAME = "Conexant Systems (Rockwell), Inc. USB Modem"  # Modem Manufacturer, For Ex: 'U.S. Robotics' if the 'lsusb' cmd output is similar to "Bus 001 Device 004: ID 0baf:0303 U.S. Robotics"
-
 
 # Record Voice Mail Variables
 REC_VM_MAX_DURATION = 120  # Time in Seconds
@@ -44,7 +42,7 @@ def set_COM_port_settings(com_port):
 # =================================================================
 # Read AT Command Response from the Modem
 # =================================================================
-def read_AT_cmd_response(expected_response="OK"):
+def read_AT_cmd_response(expected_response: str="OK"):
 
     # Set the auto timeout interval
     start_time = datetime.now()
@@ -68,11 +66,21 @@ def read_AT_cmd_response(expected_response="OK"):
         print("Error in read_modem_response function...")
         return False
 
+def recover_from_error():
+    # Stop Global Modem Event listener
+    global disable_modem_event_listener
+    disable_modem_event_listener = True
+
+    # Reset USB Device
+    reset_USB_Device()
+
+    # Start Global Modem Event listener
+    disable_modem_event_listener = False
 
 # =================================================================
 # Execute AT Commands at the Modem
 # =================================================================
-def exec_AT_cmd(modem_AT_cmd, expected_response="OK"):
+def exec_AT_cmd(modem_AT_cmd: str, expected_response: str ="OK"):
 
     global disable_modem_event_listener
     disable_modem_event_listener = True
@@ -176,7 +184,7 @@ def init_modem_settings():
             print("Error: Unable to access the Modem")
 
         # reset to factory default.
-        if not exec_AT_cmd("ATZ3"):
+        if not exec_AT_cmd("ATZ"): ## this modem uses "ATZ" to reset, not "ATZ3"
             print("Error: Unable reset to factory default")
 
         # Display result codes in verbose form
@@ -256,7 +264,7 @@ def read_data():
     while 1:
 
         if not disable_modem_event_listener:
-            modem_data = analog_modem.readline()
+            modem_data = analog_modem.readline().decode()
 
             if modem_data != "":
                 print(modem_data)
@@ -281,8 +289,8 @@ def read_data():
                     else:
                         print("Silence: Call Terminated")
 
-                if ("-s".encode() in modem_data) or (
-                    ("<DLE>-s").encode() in modem_data
+                if ("-s" in modem_data) or (
+                    ("<DLE>-s") in modem_data
                 ):
                     print("silence found during recording")
                     analog_modem.write(("<DLE>-!" + "\r").encode())
@@ -334,4 +342,4 @@ init_modem_settings()
 atexit.register(close_modem_port)
 
 # see if we can detect the modem
-detect_COM_port()
+read_data()
