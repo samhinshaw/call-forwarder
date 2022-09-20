@@ -1,13 +1,20 @@
 # Call Forwarder
 
-Big shoutout to Pradeep Singh (@pradeesi) for blogging about his work.
-
 This project is in development. I'll be taking notes along the way: [NOTES.md](./NOTES.md)
+
+## Shoutouts
+
+Thanks to Pradeep Singh (@pradeesi) for blogging about his work.
+Thanks to @havocsec for adapting Pradeep's work into a Python3 API for the Conexant CX93001 modem.
 
 ## Get Started
 
 * direnv
 * install reqs
+* install pm2
+    ```sh
+    sudo apt update && sudo apt install sudo curl && curl -sL https://raw.githubusercontent.com/Unitech/pm2/master/packager/setup.deb.sh | sudo -E bash -
+    ```
 
 ## References
 
@@ -20,6 +27,7 @@ This project is in development. I'll be taking notes along the way: [NOTES.md](.
 * How I turned my old rotary phone into a virtual assistant
   * [Blog Post](https://tcz.medium.com/how-i-turned-my-old-rotary-phone-into-a-virtual-assistant-24f35ca9884f)
   * [Source Code (GitHub)](https://github.com/tcz/rotary)
+* [Python3 API for Conexant CX93001 modem](https://github.com/havocsec/cx93001)
 
 ### Conversation Threads
 * https://forums.raspberrypi.com/viewtopic.php?t=40326&p=330143
