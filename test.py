@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from modem import CX93001
 
 with CX93001(
@@ -8,5 +9,7 @@ with CX93001(
     # this loop won't re-initiate until wait_call returns, since it's synchronous
     # wait_call will loop until it gets a response.
     while True:
+        print("Waiting for call...")
         res = modem.wait_call()
+        print("Incoming call logged...")
         print(res)

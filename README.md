@@ -11,10 +11,14 @@ Thanks to @havocsec for adapting Pradeep's work into a Python3 API for the Conex
 
 * direnv
 * install reqs
-* install pm2
-    ```sh
-    sudo apt update && sudo apt install sudo curl && curl -sL https://raw.githubusercontent.com/Unitech/pm2/master/packager/setup.deb.sh | sudo -E bash -
-    ```
+
+## Usage 
+
+Here we use `nohup` as a simple way to keep the process alive on our Pi
+
+```sh
+nohup python test.py > call_details.log &
+```
 
 ## References
 
