@@ -17,6 +17,10 @@ from datetime import datetime
 import serial
 from pydub import AudioSegment
 
+import reactivex as rx
+from reactivex.observable import Observable
+from reactivex import operators as ops
+
 
 class CouldNotInitializeException(Exception):
     pass
@@ -154,6 +158,18 @@ class CX93001:
         """
 
         return b"\x10s" in data or b"\x10b" in data or b"\x10\x03" in data
+
+    def call_details(self, max_rings_ignore_cid=4) -> Observable[int]:
+        """Stream Caller ID Details
+
+        Args:
+            max_rings_ignore_cid (int, optional): Number of rings to wait before assuming that Caller ID was not working properly. Defaults to 4.
+        """
+        source = rx.of("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
+        return source.pipe(ops.map(lambda s: len(s)), ops.filter(lambda i: i >= 5))
+    
+    def print_output(self) -> None:
+        print(self.__con.readline().decode().replace("\r\n", ""))
 
     def wait_call(self, max_rings_ignore_cid=4):
         """Waits until an incoming call is detected, then returns its caller ID data
