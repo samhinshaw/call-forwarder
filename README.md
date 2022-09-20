@@ -14,10 +14,12 @@ Thanks to @havocsec for adapting Pradeep's work into a Python3 API for the Conex
 
 ## Usage 
 
-Here we use `nohup` as a simple way to keep the process alive on our Pi
+Here we use `nohup` as a simple way to keep the process alive on our Pi:
 
 ```sh
-nohup python test.py > call_details.log &
+# -u sets stdout & stderr to be "unbuffered"
+# this is critical since we're using stdout for logging
+nohup python -u call_logger.py > call_details.log &
 ```
 
 ## References
