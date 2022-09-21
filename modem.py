@@ -104,8 +104,7 @@ class CX93001:
         if not self.__at("AT+VCID=1"):
             raise CouldNotInitializeException("Could not enable caller ID")
 
-        # How can we read from the modem in a non-blocking way?
-        Timer(1.0, self.read_input).start()
+        # Timer(1.0, self.read_input).start()
 
     def __enter__(self):
         return self
@@ -173,10 +172,16 @@ class CX93001:
     def push(self, data: str) -> None:
         self.__output.on_next(data)
 
+    # def read_input(self) -> None:
+    #     while True:
+    #         data = self.__con.readline().decode().replace("\r\n", "")
+    #         self.__output.on_next(data)
+
     def read_input(self) -> None:
         while True:
             data = self.__con.readline().decode().replace("\r\n", "")
-            self.__output.on_next(data)
+            if data != "":
+                print(data)
 
     def wait_call(self, max_rings_ignore_cid=4):
         """Waits until an incoming call is detected, then returns its caller ID data

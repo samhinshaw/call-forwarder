@@ -4,8 +4,9 @@ This project is in development. I'll be taking notes along the way: [NOTES.md](.
 
 ## Shoutouts
 
-Thanks to Pradeep Singh (@pradeesi) for blogging about his work.
-Thanks to @havocsec for adapting Pradeep's work into a Python3 API for the Conexant CX93001 modem.
+Thanks to Pradeep Singh (@pradeesi) for [blogging about his work](https://iotbytes.wordpress.com/usb-analog-modem-with-raspberry-pi/).
+Thanks to @havocsec for adapting Pradeep's work into a [Python3 API for the Conexant CX93001 modem](https://github.com/havocsec/cx93001).
+Thanks to @kolonist for the [serial-at](https://github.com/kolonist/serial-at) package. 
 
 ## Get Started
 
