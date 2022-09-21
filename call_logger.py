@@ -10,6 +10,6 @@ with CX93001(
     # wait_call will loop until it gets a response.
     while True:
         print("Waiting for call...")
-        res = modem.wait_call()
+        res = modem.wait_call(max_rings_ignore_cid=2)
         print("Incoming call logged...")
         print(res)
