@@ -1,14 +1,14 @@
-import { SerialPort } from "serialport";
-import { ReadlineParser } from "@serialport/parser-readline";
+import { SerialPort } from 'serialport';
+import { ReadlineParser } from '@serialport/parser-readline';
 
-const MODEM_PORT = "/dev/ttyACM0";
+const MODEM_PORT = '/dev/ttyACM0';
 
 const portOptions = {
   baudRate: 115200,
   dataBits: 8,
   stopBits: 1,
-  parity: "none",
-  line_end: "\r\n",
+  parity: 'none',
+  line_end: '\r\n',
   read_time: 1000,
 };
 
@@ -29,7 +29,7 @@ const port = new SerialPort(
     baudRate: 115200,
     dataBits: 8,
     stopBits: 1,
-    parity: "none",
+    parity: 'none',
     xon: false,
     xoff: false,
     rtscts: false,
@@ -39,12 +39,10 @@ const port = new SerialPort(
     if (err) {
       return console.error(err);
     }
-  }
+  },
 );
 
-
-
 // Switches the port into "flowing mode"
-port.on('data', function (data) {
-  console.log('Data:', data)
-})
+port.on('data', data => {
+  console.log('Data:', data);
+});
