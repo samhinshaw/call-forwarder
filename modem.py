@@ -16,9 +16,13 @@ import fcntl
 from datetime import datetime
 import serial
 from pydub import AudioSegment
+from threading import Timer
 
 import reactivex as rx
 from reactivex.observable import Observable
+from reactivex.subject import Subject
+
+# from reactivex.observer import ObserverBase
 from reactivex import operators as ops
 
 
@@ -36,6 +40,9 @@ class CX93001:
     __modem_name: str
     __listening: bool = True
 
+    __output: Subject[str] = Subject()
+    # output: ObserverBase[str]
+
     def __init__(self, modem_name: str, port="/dev/ttyACM0", baudrate=115200):
         """Constructor
 
@@ -47,6 +54,7 @@ class CX93001:
         AT commands.
         """
 
+        self.output = self.__output.as_observer()
         self.__modem_name = modem_name
         self.__con = serial.Serial(
             port=port,
@@ -95,6 +103,9 @@ class CX93001:
             raise CouldNotInitializeException("Could not enable command echoing")
         if not self.__at("AT+VCID=1"):
             raise CouldNotInitializeException("Could not enable caller ID")
+
+        # How can we read from the modem in a non-blocking way?
+        Timer(1.0, self.read_input).start()
 
     def __enter__(self):
         return self
@@ -159,17 +170,13 @@ class CX93001:
 
         return b"\x10s" in data or b"\x10b" in data or b"\x10\x03" in data
 
-    def call_details(self, max_rings_ignore_cid=4) -> Observable[int]:
-        """Stream Caller ID Details
+    def push(self, data: str) -> None:
+        self.__output.on_next(data)
 
-        Args:
-            max_rings_ignore_cid (int, optional): Number of rings to wait before assuming that Caller ID was not working properly. Defaults to 4.
-        """
-        source = rx.of("Alpha", "Beta", "Gamma", "Delta", "Epsilon")
-        return source.pipe(ops.map(lambda s: len(s)), ops.filter(lambda i: i >= 5))
-    
-    def print_output(self) -> None:
-        print(self.__con.readline().decode().replace("\r\n", ""))
+    def read_input(self) -> None:
+        while True:
+            data = self.__con.readline().decode().replace("\r\n", "")
+            self.__output.on_next(data)
 
     def wait_call(self, max_rings_ignore_cid=4):
         """Waits until an incoming call is detected, then returns its caller ID data
